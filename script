@@ -1,3 +1,4 @@
+###请查考https://api.cloudflare.com/#dns-records-for-a-zone-update-dns-record###
 :local cfi "THE_ZONE_ID";
 :local cfr "THE_RECORD_ID";
 :local cfe "ACCOUNT_EMAIL_ADDRESS";
@@ -16,3 +17,16 @@
 /tool fetch mode=https http-method=put url="https://api.cloudflare.com/client/v4/zones/$cfi/dns_records/$cfr" \
 http-header-field="content-type:application/json,X-Auth-Email:$cfe,X-Auth-Key:$cfk" \
 http-data="{\"type\":\"A\",\"name\":\"$cfd\",\"content\":\"$ROSWANIP\",\"proxied\":$cfp}" \ output=none
+
+
+
+
+
+###########以下是获取RECORDID，即上面脚本的THE_RECORD_DOMAIN######不能复制到ROS脚本中的#####
+####把[ZONE_ID],[EMAIL_ADDRESS],[API_GLOBAL_KEY]换成你自己的账号值，去掉"[]"，在任意linux下执行以下代码
+
+curl -X GET "https://api.cloudflare.com/client/v4/zones/[ZONE_ID]/dns_records" -H "X-Auth-Email: [EMAIL_ADDRESS]" -H "X-Auth-Key: [API_GLOBAL_KEY]" -H "Content-Type: application/json"
+
+#返回的值中有你要解析的域名地址，通常返回的结果如{"result":[{"id":"4127xxxxxxxxxxxxxxxxx09","type":"A","name":"www.domain.com","content":"127.0.0.1",
+#4127xxxxxxxxxxxxxxxxx09,这串就是record id
+#
