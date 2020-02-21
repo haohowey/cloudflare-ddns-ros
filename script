@@ -1,0 +1,18 @@
+:local cfi "THE_ZONE_ID";
+:local cfr "THE_RECORD_ID";
+:local cfe "ACCOUNT_EMAIL_ADDRESS";
+:local cfk "API_GLOBAL_KEY";
+:local cfd "THE_RECORD_DOMAIN";
+:local cfp false;
+
+:local WANInterface "pppoE-out1";
+:local ROSWANIP "";
+
+:local currentIP [/ip address get [/ip address find interface=$WANInterface] address];
+
+:set ROSWANIP [:pick $currentIP 0 [:find $currentIP "/"]];
+
+
+/tool fetch mode=https http-method=put url="https://api.cloudflare.com/client/v4/zones/$cfi/dns_records/$cfr" \
+http-header-field="content-type:application/json,X-Auth-Email:$cfe,X-Auth-Key:$cfk" \
+http-data="{\"type\":\"A\",\"name\":\"$cfd\",\"content\":\"$ROSWANIP\",\"proxied\":$cfp}" \ output=none
